@@ -38,7 +38,7 @@ const MainIcon = styled.div`
 
 const IconSvg = styled.svg`
 	path {
-		fill: #c3c4ce;
+		fill: #b1b1b1;
 	}
 `;
 
