@@ -5,7 +5,6 @@ const PostWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	transition: all 0.22s ease;
-	width: 262px;
 	border-radius: 12px;
 	cursor: pointer;
 
@@ -50,6 +49,7 @@ const PostInfoAtom = styled.p`
 const PostTitleInfo = styled.div`
 	display: flex;
 	align-items: flex-start;
+	align-items: center;
 `;
 
 const PostSource = styled.div`
@@ -69,10 +69,11 @@ const PostSourceImg = styled.img`
 const PostTitle = styled.h3`
 	font-size: 16px;
 	font-weight: 500;
+	line-height: 130%;
 	color: #18191b;
 	word-break: keep-all;
 	overflow: hidden;
-	margin: 0 0 0 11.5px;
+	margin: 0 0 -5px 11.5px;
 	width: calc(100% - 46.5px);
 `;
 
