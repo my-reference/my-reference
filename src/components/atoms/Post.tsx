@@ -73,6 +73,7 @@ const PostTitle = styled.h3`
 	word-break: keep-all;
 	overflow: hidden;
 	margin: 0 0 0 11.5px;
+	width: calc(100% - 46.5px);
 `;
 
 const PostManageIcons = styled.div`
@@ -86,7 +87,7 @@ const PostMangeIcon = styled.div`
 	margin-left: 10px;
 `;
 
-type PostPropsType = {
+export type PostPropsType = {
 	postImg: string;
 	postCategory: string;
 	postAddDate: string;
