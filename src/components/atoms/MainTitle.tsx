@@ -37,6 +37,12 @@ const MainIcon = styled.div`
 `;
 
 const IconSvg = styled.svg`
+	transition: all 0.22s ease;
+	&:hover {
+		margin-top: -2px;
+		//transform: translateY(-2px);
+	}
+
 	path {
 		fill: #b1b1b1;
 	}

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const CategoryBtnBlock = styled.div`
-	width: 292px;
+	width: 232px;
 	height: 46px;
 	background-color: rgba(0, 0, 0, 0);
 	color: #7a7c85;

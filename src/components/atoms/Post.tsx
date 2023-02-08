@@ -20,7 +20,7 @@ const PostWrapper = styled.div`
 `;
 
 const PostImgWrapper = styled.div`
-	height: 160px;
+	height: 200px;
 	border-radius: 12px;
 	overflow: hidden;
 	transition: all 0.22s ease;
@@ -82,10 +82,23 @@ const PostManageIcons = styled.div`
 	opacity: 0;
 	display: flex;
 	justify-content: flex-end;
+	margin-top: 10px;
 `;
 
 const PostMangeIcon = styled.div`
 	margin-left: 10px;
+	transition: all 0.22s ease;
+	&:hover {
+		margin-top: -2px;
+		.heart {
+			path {
+				fill: #ff2d2d;
+			}
+		}
+		path {
+			fill: #18191b;
+		}
+	}
 `;
 
 export type PostPropsType = {
@@ -114,7 +127,14 @@ function Post({ postImg, postCategory, postAddDate, postSource, postTitle }: Pos
 			</PostTitleInfo>
 			<PostManageIcons className="post-icons">
 				<PostMangeIcon>
-					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<svg
+						className="heart"
+						width="20"
+						height="20"
+						viewBox="0 0 20 20"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
 						<g clipPath="url(#clip0_11_839)">
 							<path
 								d="M9.99999 17.7917L8.79166 16.6917C4.49999 12.8 1.66666 10.2333 1.66666 7.08333C1.66666 4.51667 3.68332 2.5 6.24999 2.5C7.69999 2.5 9.09166 3.175 9.99999 4.24167C10.9083 3.175 12.3 2.5 13.75 2.5C16.3167 2.5 18.3333 4.51667 18.3333 7.08333C18.3333 10.2333 15.5 12.8 11.2083 16.7L9.99999 17.7917Z"
