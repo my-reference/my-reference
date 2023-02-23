@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import CategoryBtn from './CategoryBtn';
 
 export default {
@@ -9,5 +10,9 @@ export default {
 const CATEGORY_TEXT = '웹 개발';
 
 export function Default() {
-	return <CategoryBtn categoryName={CATEGORY_TEXT} />;
+	return (
+		<BrowserRouter>
+			<CategoryBtn categoryName={CATEGORY_TEXT} onClick={() => {}} />
+		</BrowserRouter>
+	);
 }

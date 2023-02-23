@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeaderWrap = styled.div`
@@ -12,14 +13,29 @@ const HeaderInner = styled.div`
 	height: 100%;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 `;
 
 const HeaderRight = styled.div`
 	height: 100%;
 `;
 
-const Logo = styled.img`
+const LogoLink = styled(Link)`
 	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+`;
+
+const Logo = styled.img`
+	height: 40%;
+`;
+
+const LogoText = styled.h1`
+	color: #f3f3f3;
+	margin-left: 10px;
+	font-size: 16px;
 `;
 
 const HeaderLeft = styled.div`
@@ -31,10 +47,10 @@ function Header() {
 		<HeaderWrap>
 			<HeaderInner>
 				<HeaderRight>
-					<Logo
-						src="https://s3-alpha-sig.figma.com/img/1ac0/78f7/6da7663c04b7f927bc22ae67d7a4aa1b?Expires=1676851200&Signature=mKj5zO4hcz7V4UhuonlRKOC41WQgRxswtVmSQP4cQAIGv2I7rzuzT3OOkEjtfVAjLr9f9lZd1ZaCPTl310HjtNI5WaUJ-hNre-vOfK7AKY~fWLIiG6WUJmBk5dbRHf9x7BQcoAvgDPOtO8uED2LbQBehRiTZiOiREn9OtlLFNQcdazfl-~RgrlrU3lXj1StsXAruZA0laOFclFULeQ8qBw-Oo2WnYkSLB091RKwa3YrruYjjb2X1NjUNS0U9yk7W~uw4MHHB50vyk99WrTMmxJwUzMx1hxJLhmu4QbIt0GQfmGWtj1nTQQWjqjkDy5Xg8UjdNFH44gOtMnGBOYETLQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
-						alt="logo"
-					/>
+					<LogoLink to="/">
+						<Logo src={`${process.env.PUBLIC_URL}/logo512.png`} alt="logo" />
+						<LogoText>my-reference</LogoText>
+					</LogoLink>
 				</HeaderRight>
 				<HeaderLeft>유저이미지들어갈예정</HeaderLeft>
 			</HeaderInner>

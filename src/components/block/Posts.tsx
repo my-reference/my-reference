@@ -1,7 +1,10 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import MainTitle from '../atoms/MainTitle';
-import Post, { PostPropsType } from '../atoms/Post';
+import Post from '../atoms/Post';
+import categorySelect from '../../services/atom';
+import PostAdd from '../atoms/PostAdd';
 
 const PostsWrapper = styled.div`
 	display: grid;
@@ -18,33 +21,60 @@ const PostsLayout = styled.div`
 	transition: all 0.22s ease;
 	column-gap: 32px;
 	row-gap: 40px;
+
+	@media only screen and (max-width: 1680px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	@media only screen and (max-width: 1370px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	@media only screen and (max-width: 1020px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	@media only screen and (max-width: 727px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 `;
 
-const PostAtom = styled.div``;
+const PostAtom = styled.div`
+	> div {
+		animation: 0.1s ease-in-out loadEffect1;
+	}
+
+	@keyframes loadEffect1 {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+`;
 
 type PostsPropsType = {
-	categoryName: string;
-	posts: Array<PostPropsType>;
+	posts: Array<{ postCategory: string; postAddDate: string; postLink: string }>;
 };
 
-function Posts({ categoryName, posts }: PostsPropsType) {
+function Posts({ posts }: PostsPropsType) {
+	const categoryName = useRecoilValue(categorySelect);
+
 	return (
 		<PostsWrapper>
 			<PostCategoryName>
 				<MainTitle title={categoryName} />
 			</PostCategoryName>
 			<PostsLayout>
-				{posts.map((post) => (
-					<PostAtom>
-						<Post
-							postImg={post.postImg}
-							postCategory={post.postCategory}
-							postAddDate={post.postAddDate}
-							postSource={post.postSource}
-							postTitle={post.postTitle}
-						/>
-					</PostAtom>
-				))}
+				{posts
+					.filter((post) => post.postCategory === categoryName)
+					.map((post, index) => (
+						// eslint-disable-next-line react/no-array-index-key
+						<PostAtom key={index}>
+							<Post postCategory={post.postCategory} postAddDate={post.postAddDate} postLink={post.postLink} />
+						</PostAtom>
+					))}
+				<PostAtom>
+					<PostAdd />
+				</PostAtom>
 			</PostsLayout>
 		</PostsWrapper>
 	);

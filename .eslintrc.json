@@ -24,6 +24,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/function-component-definition":[2, {"namedcomponents":"arrow-function"}]
+        "react/function-component-definition":[2, {"namedcomponents":"arrow-function"}],
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     }
 }

@@ -7,6 +7,10 @@ import Posts from '../block/Posts';
 const MainPageStyle = styled.div`
 	display: flex;
 	padding: 60px 20px;
+
+	@media only screen and (max-width: 1680px) {
+		justify-content: center;
+	}
 `;
 
 const mockData = mockMainData;
@@ -14,11 +18,9 @@ const mockData = mockMainData;
 function Main() {
 	return (
 		<MainPageStyle>
+			<Category favorites={mockData.favoritesCategories} categories={mockData.categories} />
 			<div>
-				<Category favorites={mockData.favoritesCategories} categories={mockData.categories} />
-			</div>
-			<div>
-				<Posts categoryName={mockData.CATEGORY_NAME} posts={mockData.posts} />
+				<Posts posts={mockData.posts} />
 			</div>
 		</MainPageStyle>
 	);
