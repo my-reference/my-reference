@@ -37,6 +37,7 @@ const PostImgWrapper = styled.div`
 	overflow: hidden;
 	transition: all 0.22s ease;
 	border: 0.1px solid #ececec;
+	background-color: #fff;
 `;
 
 const PostImg = styled.img`
@@ -103,13 +104,17 @@ const PostMangeIcon = styled.div`
 	transition: all 0.22s ease;
 	&:hover {
 		margin-top: -2px;
-		.heart {
+		.heart,
+		.delete {
 			path {
 				fill: #ff2d2d;
 			}
 		}
-		path {
-			fill: #18191b;
+		.copy {
+			path {
+				fill: #18191b;
+				stroke: #18191b;
+			}
 		}
 	}
 `;
@@ -234,15 +239,45 @@ function Post({ postCategory, postAddDate, postLink }: PostPropsType) {
 							</svg>
 						</PostMangeIcon>
 						<PostMangeIcon>
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg
+								className="copy"
+								width="21"
+								height="20"
+								viewBox="0 0 21 20"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
 								<g clipPath="url(#clip0_11_842)">
 									<path
-										d="M5.00001 8.33333C4.08334 8.33333 3.33334 9.08333 3.33334 9.99999C3.33334 10.9167 4.08334 11.6667 5.00001 11.6667C5.91668 11.6667 6.66668 10.9167 6.66668 9.99999C6.66668 9.08333 5.91668 8.33333 5.00001 8.33333ZM15 8.33333C14.0833 8.33333 13.3333 9.08333 13.3333 9.99999C13.3333 10.9167 14.0833 11.6667 15 11.6667C15.9167 11.6667 16.6667 10.9167 16.6667 9.99999C16.6667 9.08333 15.9167 8.33333 15 8.33333ZM10 8.33333C9.08334 8.33333 8.33334 9.08333 8.33334 9.99999C8.33334 10.9167 9.08334 11.6667 10 11.6667C10.9167 11.6667 11.6667 10.9167 11.6667 9.99999C11.6667 9.08333 10.9167 8.33333 10 8.33333Z"
+										d="M4.73653 2.90316H4.23653V3.40316V12.7253H3.83337V3.40316C3.83337 2.90756 4.24094 2.5 4.73653 2.5H12.6555V2.90316H4.73653ZM15.2602 16.5316H15.7602V16.0316V6.20947V5.70947H15.2602H7.54285H7.04285V6.20947V16.0316V16.5316H7.54285H15.2602ZM7.54285 5.30632H15.2602C15.7558 5.30632 16.1634 5.71388 16.1634 6.20947V16.0316C16.1634 16.5272 15.7558 16.9347 15.2602 16.9347H7.54285C7.04725 16.9347 6.63969 16.5272 6.63969 16.0316V6.20947C6.63969 5.71388 7.04725 5.30632 7.54285 5.30632Z"
 										fill="#B1B1B1"
+										stroke="#B1B1B1"
 									/>
 								</g>
 								<defs>
 									<clipPath id="clip0_11_842">
+										<rect width="20" height="20" fill="white" transform="translate(0.333374)" />
+									</clipPath>
+								</defs>
+							</svg>
+						</PostMangeIcon>
+						<PostMangeIcon>
+							<svg
+								className="delete"
+								width="20"
+								height="20"
+								viewBox="0 0 20 20"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<g clipPath="url(#clip0_170_377)">
+									<path
+										d="M3.95 16.2C3.95 17.245 4.805 18.1 5.85 18.1H13.45C14.495 18.1 15.35 17.245 15.35 16.2V4.8H3.95V16.2ZM16.3 1.95H12.975L12.025 1H7.275L6.325 1.95H3V3.85H16.3V1.95Z"
+										fill="#B1B1B1"
+									/>
+								</g>
+								<defs>
+									<clipPath id="clip0_170_377">
 										<rect width="20" height="20" fill="white" />
 									</clipPath>
 								</defs>

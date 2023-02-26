@@ -8,9 +8,7 @@ const MainPageStyle = styled.div`
 	display: flex;
 	padding: 60px 20px;
 
-	@media only screen and (max-width: 1680px) {
-		justify-content: center;
-	}
+	justify-content: center;
 `;
 
 const mockData = mockMainData;

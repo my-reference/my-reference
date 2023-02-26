@@ -9,6 +9,9 @@ import PostAdd from '../atoms/PostAdd';
 const PostsWrapper = styled.div`
 	display: grid;
 	transition: all 0.22s ease;
+	@media only screen and (min-width: 1680px) {
+		width: 1376px;
+	}
 `;
 
 const PostCategoryName = styled.div`
@@ -58,8 +61,33 @@ type PostsPropsType = {
 function Posts({ posts }: PostsPropsType) {
 	const categoryName = useRecoilValue(categorySelect);
 
+	const postsElement = document.getElementsByClassName('posts')[0] as HTMLElement;
+	if (postsElement) {
+		postsElement.ondragenter = (e) => {
+			e.preventDefault();
+			postsElement.style.backgroundColor = '#3e7bff';
+		};
+
+		postsElement.ondragleave = (e) => {
+			e.preventDefault();
+			postsElement.style.backgroundColor = '';
+		};
+
+		postsElement.ondragend = (e) => {
+			e.preventDefault();
+			postsElement.style.backgroundColor = '';
+		};
+
+		postsElement.ondrop = (e) => {
+			e.preventDefault();
+			const data = e.dataTransfer;
+
+			console.log(data);
+		};
+	}
+
 	return (
-		<PostsWrapper>
+		<PostsWrapper className="posts">
 			<PostCategoryName>
 				<MainTitle title={categoryName} />
 			</PostCategoryName>
