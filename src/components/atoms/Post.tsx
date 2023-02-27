@@ -82,13 +82,20 @@ const PostSourceImg = styled.img`
 
 const PostTitle = styled.h3`
 	font-size: 16px;
-	font-weight: 500;
+	font-weight: 600;
 	line-height: 130%;
 	color: #18191b;
 	word-break: keep-all;
 	overflow: hidden;
 	margin: 0 0 -5px 11.5px;
 	width: calc(100% - 46.5px);
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2; /* 라인수 */
+	-webkit-box-orient: vertical;
+	word-wrap: break-word;
 `;
 
 const PostManageIcons = styled.div`
