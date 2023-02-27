@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import MainTitle from '../atoms/MainTitle';
 import Post from '../atoms/Post';
-import categorySelect from '../../services/atom';
+import { categorySelect } from '../../services/atom';
 import PostAdd from '../atoms/PostAdd';
 
 const PostsWrapper = styled.div`
@@ -80,9 +80,6 @@ function Posts({ posts }: PostsPropsType) {
 
 		postsElement.ondrop = (e) => {
 			e.preventDefault();
-			const data = e.dataTransfer;
-
-			console.log(data);
 		};
 	}
 

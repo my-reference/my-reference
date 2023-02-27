@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const HeaderWrap = styled.div`
+const HeaderWrap = styled.header`
 	background-color: #1a1b1e;
 	width: 100%;
 	height: 56px;
+	transition: all 500ms ease;
 `;
 
 const HeaderInner = styled.div`

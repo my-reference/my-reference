@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { postAddModalSelect } from '../../services/atom';
 
 const PostWrapper = styled.div`
 	display: flex;
@@ -44,8 +46,20 @@ const PostInfoAtom = styled.p`
 `;
 
 function PostAdd() {
+	const setPostAddModal = useSetRecoilState(postAddModalSelect);
+	const showModal = () => {
+		setPostAddModal(true);
+		document.body.classList.add('fix-scroll');
+		document.querySelector('header')?.classList.add('is-blur');
+		document.querySelector('main')?.classList.add('is-blur');
+		setTimeout(() => {
+			document.querySelector('#post-add-modal')?.classList.add('translateZero');
+			document.querySelector('#post-add-modal-inner')?.classList.add('translateZero');
+		}, 10);
+	};
+
 	return (
-		<PostWrapper>
+		<PostWrapper onClick={showModal}>
 			<PostImgWrapper className="post-img">
 				<svg width="320" height="200" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect width="320" height="200" rx="12" fill="#F3F3F3" />

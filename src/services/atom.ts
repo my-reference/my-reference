@@ -1,8 +1,11 @@
 import { atom } from 'recoil';
 
-const categorySelect = atom({
+export const categorySelect = atom({
 	key: 'category',
 	default: '',
 });
 
-export default categorySelect;
+export const postAddModalSelect = atom({
+	key: 'postAddModal',
+	default: false,
+});

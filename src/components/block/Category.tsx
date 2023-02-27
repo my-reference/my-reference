@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import CategoryBtn from '../atoms/CategoryBtn';
-import categorySelect from '../../services/atom';
+import { categorySelect } from '../../services/atom';
 
 const CategoryWrapper = styled.div`
 	margin: 0;

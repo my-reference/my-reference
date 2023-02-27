@@ -12,3 +12,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.fix-scroll {
+  overflow-y:hidden;
+}
+
+.is-blur {
+  filter: blur(4px);
+}
+
+.translateZero {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
