@@ -189,7 +189,7 @@ function Post({ postCategory, postAddDate, postLink }: PostPropsType) {
 				<PostSkeleton />
 			) : (
 				<PostWrapper>
-					<PostLink href={postLink}>
+					<PostLink href={postLink} target="_blank">
 						<PostImgWrapper className="post-img">
 							{postImg !== '' ? (
 								<PostImg src={postImg} alt={postTitle} />
