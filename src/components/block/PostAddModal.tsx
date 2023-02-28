@@ -92,6 +92,11 @@ const AddButton = styled.button`
 	color: #ffffff;
 	margin-bottom: 12px;
 	cursor: pointer;
+	transition: all 200ms ease;
+
+	&:hover {
+		transform: translateY(2px);
+	}
 `;
 
 export default function PostAddModal() {
