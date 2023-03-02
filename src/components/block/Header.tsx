@@ -17,7 +17,7 @@ const HeaderInner = styled.div`
 	align-items: center;
 `;
 
-const HeaderRight = styled.div`
+const HeaderLeft = styled.div`
 	height: 100%;
 `;
 
@@ -39,21 +39,36 @@ const LogoText = styled.h1`
 	font-size: 16px;
 `;
 
-const HeaderLeft = styled.div`
+const HeaderRight = styled.div`
 	height: 100%;
+	display: flex;
+	align-items: center;
+	> div {
+		font-family: 'Pretendard';
+		font-weight: 600;
+		font-size: 15px;
+		color: #fff;
+		> p {
+			cursor: pointer;
+		}
+	}
 `;
 
 function Header() {
 	return (
 		<HeaderWrap>
 			<HeaderInner>
-				<HeaderRight>
+				<HeaderLeft>
 					<LogoLink to="/">
 						<Logo src={`${process.env.PUBLIC_URL}/logo512.png`} alt="logo" />
 						<LogoText>my-reference</LogoText>
 					</LogoLink>
+				</HeaderLeft>
+				<HeaderRight>
+					<div>
+						<p>로그인</p>
+					</div>
 				</HeaderRight>
-				<HeaderLeft>유저이미지들어갈예정</HeaderLeft>
 			</HeaderInner>
 		</HeaderWrap>
 	);

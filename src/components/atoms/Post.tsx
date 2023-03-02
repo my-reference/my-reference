@@ -150,7 +150,7 @@ function Post({ postCategory, postAddDate, postLink }: PostPropsType) {
 
 	const getHtml = async () => {
 		try {
-			return await axios.get(`http://192.168.64.2:8080/${postLink}`, {
+			return await axios.get(`http://3.35.43.247:8080/${postLink}`, {
 				headers: {
 					'Access-Control-Allow-Origin': '*',
 					'X-Requested-With': '*',

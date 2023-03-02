@@ -51,6 +51,11 @@ const MockMainData = {
 			postAddDate: '2023.02.22',
 			postLink: 'https://ksone.site/7',
 		},
+		{
+			postCategory: '웹 개발',
+			postAddDate: '2023.02.28',
+			postLink: 'https://medium.com/slacktime/ui-ux-inspiration-sign-up-forms-1490809fee9a',
+		},
 	],
 
 	favoritesCategories: ['웹 개발', 'Git'],
