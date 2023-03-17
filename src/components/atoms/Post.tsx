@@ -7,6 +7,7 @@ import Cheerio from 'cheerio';
 import axios from 'axios';
 import PostSkeleton from './PostSkeleton';
 import { PostType } from '../../abstracts/type';
+import CopySuccessBlock from './CopySuccessBlock';
 
 const PostWrapper = styled.div`
 	display: flex;
@@ -109,6 +110,7 @@ const PostManageIcons = styled.div`
 `;
 
 const PostMangeIcon = styled.div`
+	position: relative;
 	margin-left: 10px;
 	transition: all 0.22s ease;
 	&:hover {
@@ -134,6 +136,8 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 	const [postImg, setPostImg] = useState('');
 
 	const [loading, setLoading] = useState(true);
+
+	const [isClick, setIsClick] = useState(false);
 
 	const getLdJsonObject = ($: any, index = 0): any => {
 		const scriptEles = $('script[type ="application/ld+json"]')?.toArray();
@@ -181,6 +185,42 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 			setPostImg($('meta[property="og:image"]').attr('content') || postSource || $('img').attr('src') || '');
 			setLoading(false);
 		});
+
+	const clickCopyIcon = async (e: React.MouseEvent<SVGElement>) => {
+		if (isClick) {
+			return;
+		}
+
+		setIsClick(true);
+		e.preventDefault();
+
+		if (navigator.clipboard) {
+			// (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
+			navigator.clipboard
+				.writeText(postLink)
+				.then(() => {
+					const copyBlock = document.querySelector('#copyBlock') as HTMLDivElement;
+					if (copyBlock) {
+						copyBlock.style.display = 'block';
+						copyBlock.style.opacity = '1';
+						copyBlock.style.transition = 'all 0.22s ease';
+
+						setTimeout(() => {
+							copyBlock.style.opacity = '0';
+						}, 2000);
+						setTimeout(() => {
+							copyBlock.style.display = 'none';
+							copyBlock.style.transition = '';
+							setIsClick(false);
+						}, 2220);
+					}
+				})
+				.catch(() => {
+					// eslint-disable-next-line no-alert
+					alert('클립보드에 복사 과정 중 에러가 발생했습니다.');
+				});
+		}
+	};
 
 	useEffect(() => {
 		setLoading(true);
@@ -250,6 +290,7 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 								viewBox="0 0 21 20"
 								fill="none"
 								xmlns="http://www.w3.org/2000/svg"
+								onClick={(e) => clickCopyIcon(e)}
 							>
 								<g clipPath="url(#clip0_11_842)">
 									<path
@@ -264,6 +305,7 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 									</clipPath>
 								</defs>
 							</svg>
+							<CopySuccessBlock />
 						</PostMangeIcon>
 						<PostMangeIcon>
 							<svg
