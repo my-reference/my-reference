@@ -3,7 +3,6 @@ import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import styled from 'styled-components';
-// import CategoryBtn from '../atoms/CategoryBtn';
 
 const CategoryWrapper = styled.div`
 	margin: 0;
@@ -62,67 +61,6 @@ const CategoryAddBtnBlock = styled.div`
 		}
 	}
 `;
-
-// const CategoryAddBtnText = styled.p`
-// 	transition: all 200ms ease;
-// 	font-size: 16px;
-// 	font-weight: 500;
-// 	padding: 0 20px;
-// `;
-
-// const CategoryAddForm = styled.div`
-// 	margin-top: 20px;
-// 	width: 232px;
-// 	height: 46px;
-// 	background-color: #fff;
-// 	border-radius: 12px;
-// 	transition: all 200ms ease;
-
-// 	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
-// 	display: none;
-// 	opacity: 0;
-// `;
-
-// const CategoryAddFormInner = styled.div`
-// 	height: 100%;
-// 	display: flex;
-// 	align-items: center;
-// 	flex-direction: row;
-// 	justify-content: space-between;
-// 	> input {
-// 		width: 165px;
-// 		outline: none;
-// 		border: none;
-// 		font-family: 'Pretendard';
-// 		font-style: normal;
-// 		font-weight: 500;
-// 		font-size: 16px;
-// 		line-height: 19px;
-// 		color: #18191b;
-// 		margin-left: 24px;
-// 	}
-// 	> input::placeholder {
-// 		color: #aeb1bf;
-// 	}
-// `;
-
-// const CloseBtn = styled.div`
-// 	margin-right: 10px;
-// 	display: flex;
-// 	align-items: center;
-// 	cursor: pointer;
-// `;
-
-// const CheckBtn = styled.div`
-// 	transition: all 200ms ease;
-// 	cursor: pointer;
-// 	display: flex;
-// 	align-items: center;
-// 	margin-right: 10px;
-// 	margin-left: 10px;
-// 	display: none;
-// 	opacity: 0;
-// `;
 
 function Category() {
 	return (

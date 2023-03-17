@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { CategoryBtnType } from '../../abstracts/type';
 import { categorySelect } from '../../services/atom';
 
 const CategoryBtnBlock = styled(NavLink)`
@@ -36,11 +37,6 @@ const CategoryBtnText = styled.p`
 	font-weight: 500;
 	padding: 0 20px;
 `;
-
-type CategoryBtnType = {
-	categoryName: string;
-	onClick: React.MouseEventHandler<HTMLElement>;
-};
 
 function CategoryBtn({ categoryName, onClick }: CategoryBtnType) {
 	const category = useRecoilValue(categorySelect);

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { categoryDeleteModalSelect } from '../../services/atom';
 import { showModal } from '../../utils/modalHandler';
+import { MainTitlePropsType } from '../../abstracts/type';
 
 const MainTitleWrapper = styled.div`
 	display: flex;
@@ -50,15 +51,6 @@ const IconSvg = styled.svg`
 		fill: #b1b1b1;
 	}
 `;
-
-type ICategoryObj = {
-	categoryName: string;
-	categoryId: number;
-};
-
-type MainTitlePropsType = {
-	category: ICategoryObj;
-};
 
 function MainTitle({ category }: MainTitlePropsType) {
 	const setCategoryDeleteModal = useSetRecoilState(categoryDeleteModalSelect);
