@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -158,6 +159,7 @@ function Post({ postCategory, postAddDate, postLink }: PostPropsType) {
 				maxRedirects: 0,
 			});
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			return console.error(err);
 		}
 	};

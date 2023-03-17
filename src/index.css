@@ -13,6 +13,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p {
+  margin: 0;
+}
+
+h1 {
+  margin: 0;
+}
+
 .fix-scroll {
   overflow-y:hidden;
 }

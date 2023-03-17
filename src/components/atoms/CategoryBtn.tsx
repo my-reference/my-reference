@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { categorySelect } from '../../services/atom';
 
 const CategoryBtnBlock = styled(NavLink)`
 	width: 232px;
@@ -41,8 +43,13 @@ type CategoryBtnType = {
 };
 
 function CategoryBtn({ categoryName, onClick }: CategoryBtnType) {
+	const category = useRecoilValue(categorySelect);
 	return (
-		<CategoryBtnBlock to={categoryName} onClick={onClick} className={({ isActive }) => (isActive ? 'active' : 'link')}>
+		<CategoryBtnBlock
+			to={categoryName}
+			onClick={onClick}
+			className={() => (category.categoryName === categoryName ? 'active' : 'link')}
+		>
 			<CategoryBtnText>{categoryName}</CategoryBtnText>
 		</CategoryBtnBlock>
 	);

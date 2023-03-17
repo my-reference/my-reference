@@ -1,7 +1,9 @@
 import React from 'react';
-import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { postAddModalSelect } from '../../services/atom';
+import { useMutation, useQuery } from 'react-query';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { categorySelect, categoryDeleteModalSelect } from '../../services/atom';
+import customAxios from '../../utils/customAxios';
 import { closeModal } from '../../utils/modalHandler';
 
 const BackgroundModal = styled.div`
@@ -19,7 +21,7 @@ const BackgroundModal = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-	width: 320px;
+	width: 420px;
 	height: 100px;
 	background-color: #f3f3f3;
 	border-radius: 12px;
@@ -46,41 +48,18 @@ const InputWrapper = styled.div`
 	flex-direction: row;
 	margin: 11px 15px 0 15px;
 	width: calc(100% - 30px);
-	> div {
-		display: flex;
-		align-items: center;
-	}
-	> input {
-		padding: 0;
-		width: 220px;
-		margin-left: 6px;
-		background-color: #f3f3f3;
-		outline: none;
-		border: none;
-
-		font-family: 'Pretendard';
-		font-style: normal;
-		font-weight: 500;
-		font-size: 16px;
-		line-height: 19px;
-
-		color: #1a1b1e;
-	}
-	> input::placeholder {
-		font-family: 'Pretendard';
-		font-style: normal;
-		font-weight: 500;
-		font-size: 16px;
-		line-height: 19px;
-
-		color: #aeb1bf;
-	}
+	font-family: 'Pretendard';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 19px;
+	color: #1a1b1e;
 `;
 
 const AddButton = styled.button`
 	width: 80px;
 	height: 30px;
-	background: #1bc47d;
+	background: #ff2d2d;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
 	border-radius: 6px;
 	border: none;
@@ -100,13 +79,40 @@ const AddButton = styled.button`
 	}
 `;
 
-export default function PostAddModal() {
-	const setPostAddModal = useSetRecoilState(postAddModalSelect);
+export default function CategoryDeleteModal() {
+	const category = useRecoilValue(categorySelect);
+	const setCategoryDeleteModal = useSetRecoilState(categoryDeleteModalSelect);
 
+	const { refetch } = useQuery('categories', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-shadow
+		const categories = await customAxios.get('/v1/category/list', {
+			withCredentials: true,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			},
+		});
+		return categories.data;
+	});
+
+	const DeleteCategoryQuery = useMutation(async (categoryId: number) => {
+		await customAxios.post(
+			'/v1/category/delete',
+			{
+				categoryId,
+			},
+			{
+				withCredentials: true,
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			}
+		);
+		await refetch();
+	});
 	return (
-		<BackgroundModal id="post-add-modal">
-			<ModalWrapper id="post-add-modal-inner">
-				<CloseBtn onClick={() => closeModal(setPostAddModal, 'post-add')}>
+		<BackgroundModal id="category-delete-modal">
+			<ModalWrapper id="category-delete-modal-inner">
+				<CloseBtn onClick={() => closeModal(setCategoryDeleteModal, 'category-delete')}>
 					<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clipPath="url(#clip0_177_700)">
 							<path
@@ -122,24 +128,11 @@ export default function PostAddModal() {
 					</svg>
 				</CloseBtn>
 				<InputWrapper>
-					<div>
-						<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<g clipPath="url(#clip0_177_697)">
-								<path
-									d="M4.875 15C4.875 12.8625 6.6125 11.125 8.75 11.125H13.75V8.75H8.75C5.3 8.75 2.5 11.55 2.5 15C2.5 18.45 5.3 21.25 8.75 21.25H13.75V18.875H8.75C6.6125 18.875 4.875 17.1375 4.875 15ZM10 16.25H20V13.75H10V16.25ZM21.25 8.75H16.25V11.125H21.25C23.3875 11.125 25.125 12.8625 25.125 15C25.125 17.1375 23.3875 18.875 21.25 18.875H16.25V21.25H21.25C24.7 21.25 27.5 18.45 27.5 15C27.5 11.55 24.7 8.75 21.25 8.75Z"
-									fill="#AEB1BF"
-								/>
-							</g>
-							<defs>
-								<clipPath id="clip0_177_697">
-									<rect width="30" height="30" fill="white" />
-								</clipPath>
-							</defs>
-						</svg>
-					</div>
-					<input type="text" placeholder="링크를 입력해주세요." />
+					<p>&quot;{category.categoryName}&quot; 카테고리를 정말 삭제하실거에요? </p>
 				</InputWrapper>
-				<AddButton type="button">추가하기</AddButton>
+				<AddButton type="button" onClick={() => DeleteCategoryQuery.mutate(category.categoryId)}>
+					삭제하기
+				</AddButton>
 			</ModalWrapper>
 		</BackgroundModal>
 	);
