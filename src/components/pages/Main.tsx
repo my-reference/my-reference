@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import mockMainData from '../../data/mockMainData';
 import Category from '../block/Category';
 import Posts from '../block/Posts';
 import PostAddModal from '../block/PostAddModal';
-import { postAddModalSelect } from '../../services/atom';
+import { categorySelect, postAddModalSelect, categoryDeleteModalSelect } from '../../services/atom';
+import CategoryDeleteModal from '../block/CategoryDeleteModal';
 
 const MainPageStyle = styled.main`
 	display: flex;
@@ -18,15 +20,26 @@ const mockData = mockMainData;
 
 function Main() {
 	const postAddModal = useRecoilValue(postAddModalSelect);
+	const categoryDeleteModal = useRecoilValue(categoryDeleteModalSelect);
+	const navigate = useNavigate();
+	const setCategory = useSetRecoilState(categorySelect);
+
+	useEffect(() => {
+		const firstCategoryName = { categoryName: mockData.favoritesCategories[0] || '', categoryId: 0 };
+		setCategory(firstCategoryName);
+		navigate(`/${firstCategoryName.categoryName}`);
+	}, []);
+
 	return (
 		<>
 			<MainPageStyle>
-				<Category favorites={mockData.favoritesCategories} categories={mockData.categories} />
+				<Category />
 				<div>
 					<Posts posts={mockData.posts} />
 				</div>
 			</MainPageStyle>
 			{postAddModal && <PostAddModal />}
+			{categoryDeleteModal && <CategoryDeleteModal />}
 		</>
 	);
 }

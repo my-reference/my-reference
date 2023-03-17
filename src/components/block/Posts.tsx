@@ -59,7 +59,7 @@ type PostsPropsType = {
 };
 
 function Posts({ posts }: PostsPropsType) {
-	const categoryName = useRecoilValue(categorySelect);
+	const { categoryName, categoryId } = useRecoilValue(categorySelect);
 
 	const postsElement = document.getElementsByClassName('posts')[0] as HTMLElement;
 	if (postsElement) {
@@ -86,7 +86,7 @@ function Posts({ posts }: PostsPropsType) {
 	return (
 		<PostsWrapper className="posts">
 			<PostCategoryName>
-				<MainTitle title={categoryName} />
+				<MainTitle category={{ categoryName, categoryId }} />
 			</PostCategoryName>
 			<PostsLayout>
 				{posts

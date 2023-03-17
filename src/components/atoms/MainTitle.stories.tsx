@@ -9,5 +9,5 @@ export default {
 const MAIN_TITLE = '웹 개발';
 
 export function Default() {
-	return <MainTitle title={MAIN_TITLE} />;
+	return <MainTitle category={{ categoryName: MAIN_TITLE, categoryId: 0 }} />;
 }

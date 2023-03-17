@@ -1,9 +1,12 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import CategoryBtn from '../atoms/CategoryBtn';
+import { useQuery, useMutation } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { categorySelect } from '../../services/atom';
+import CategoryBtn from '../atoms/CategoryBtn';
+import customAxios from '../../utils/customAxios';
 
 const CategoryWrapper = styled.div`
 	margin: 0;
@@ -124,22 +127,77 @@ const CheckBtn = styled.div`
 	opacity: 0;
 `;
 
-type CategoryType = {
-	favorites: Array<string>;
-	categories: Array<string>;
-};
+// type CategoryType = {
+// 	favorites: Array<string>;
+// 	categories: Array<string>;
+// };
 
-function Category({ favorites, categories }: CategoryType) {
+interface ICategory {
+	categoryId: number;
+	categoryName: string;
+	favorite: boolean;
+}
+
+function Category() {
+	const [categories, setCategories] = useState<ICategory[]>([]);
+	const [favoriteCategories, setFavoriteCategories] = useState<ICategory[]>([]);
+
 	const setCategory = useSetRecoilState(categorySelect);
 	const [newCategory, setNewCategory] = useState('');
 
-	const changeCategory = (categoryName: string) => {
-		setCategory(categoryName);
+	const changeCategory = (categoryName: string, categoryId: number) => {
+		setCategory({ categoryName, categoryId });
 	};
 
 	const changeCategoryText = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewCategory(e.target.value);
 	};
+
+	const { isLoading, data, refetch } = useQuery('categories', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-shadow
+		const categories = await customAxios.get('/v1/category/list', {
+			withCredentials: true,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			},
+		});
+		return categories.data;
+	});
+
+	const AddCategoryQuery = useMutation('categories', async (newCategoryName: string) => {
+		await customAxios.post(
+			'/v1/category/new',
+			{
+				categoryName: newCategoryName,
+			},
+			{
+				withCredentials: true,
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			}
+		);
+		await refetch();
+	});
+
+	const handleOnClick = () => {
+		AddCategoryQuery.mutate(newCategory);
+	};
+
+	const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			handleOnClick();
+		}
+	};
+
+	useEffect(() => {
+		if (data !== undefined) {
+			console.log(data);
+			setCategories(data.filter((category: ICategory) => category.favorite === false));
+
+			setFavoriteCategories(data.filter((category: ICategory) => category.favorite === true));
+		}
+	}, [data]);
 
 	useEffect(() => {
 		const checkBtn = document.getElementById('check-btn');
@@ -197,24 +255,43 @@ function Category({ favorites, categories }: CategoryType) {
 				<CategoryBlock>
 					<CategoryTitle>📌 즐겨찾기</CategoryTitle>
 					<CategoryListWrap>
-						{favorites.map((favoritesCategoryName, index) => (
-							<CategoryList key={index}>
-								<CategoryBtn
-									categoryName={favoritesCategoryName}
-									onClick={() => changeCategory(favoritesCategoryName)}
-								/>
-							</CategoryList>
-						))}
+						{isLoading ? (
+							<>
+								<Skeleton height={46} borderRadius={12} />
+								<Skeleton height={46} borderRadius={12} />
+								<Skeleton height={46} borderRadius={12} />
+							</>
+						) : (
+							favoriteCategories.map((favoriteCategory) => (
+								<CategoryList key={favoriteCategory.categoryId}>
+									<CategoryBtn
+										categoryName={favoriteCategory.categoryName}
+										onClick={() => changeCategory(favoriteCategory.categoryName, favoriteCategory.categoryId)}
+									/>
+								</CategoryList>
+							))
+						)}
 					</CategoryListWrap>
 				</CategoryBlock>
 				<CategoryBlock>
 					<CategoryTitle>📂 카테고리</CategoryTitle>
 					<CategoryListWrap>
-						{categories.map((categoryName, index) => (
-							<CategoryList key={index}>
-								<CategoryBtn categoryName={categoryName} onClick={() => changeCategory(categoryName)} />
-							</CategoryList>
-						))}
+						{isLoading ? (
+							<>
+								<Skeleton height={46} borderRadius={12} />
+								<Skeleton height={46} borderRadius={12} />
+								<Skeleton height={46} borderRadius={12} />
+							</>
+						) : (
+							categories.map((category) => (
+								<CategoryList key={category.categoryId}>
+									<CategoryBtn
+										categoryName={category.categoryName}
+										onClick={() => changeCategory(category.categoryName, category.categoryId)}
+									/>
+								</CategoryList>
+							))
+						)}
 						<CategoryList>
 							<CategoryAddBtnWrap id="category-add-btn" onClick={showCategoryAddForm}>
 								<CategoryAddBtnBlock>
@@ -229,8 +306,9 @@ function Category({ favorites, categories }: CategoryType) {
 										id="category-input"
 										onChange={(e) => changeCategoryText(e)}
 										placeholder="카테고리를 입력하세요."
+										onKeyDown={(e) => handleOnKeyPress(e)}
 									/>
-									<CheckBtn id="check-btn">
+									<CheckBtn id="check-btn" onClick={handleOnClick}>
 										<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<g clipPath="url(#clip0_175_543)">
 												<path

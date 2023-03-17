@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { categoryDeleteModalSelect } from '../../services/atom';
+import { showModal } from '../../utils/modalHandler';
 
 const MainTitleWrapper = styled.div`
 	display: flex;
@@ -48,14 +51,21 @@ const IconSvg = styled.svg`
 	}
 `;
 
-type MainTitlePropsType = {
-	title: string;
+type ICategoryObj = {
+	categoryName: string;
+	categoryId: number;
 };
 
-function MainTitle({ title }: MainTitlePropsType) {
+type MainTitlePropsType = {
+	category: ICategoryObj;
+};
+
+function MainTitle({ category }: MainTitlePropsType) {
+	const setCategoryDeleteModal = useSetRecoilState(categoryDeleteModalSelect);
+
 	return (
 		<MainTitleWrapper>
-			<MainText>{title}</MainText>
+			<MainText>{category.categoryName}</MainText>
 			<MainIcons>
 				<MainIcon>
 					<IconSvg
@@ -87,6 +97,7 @@ function MainTitle({ title }: MainTitlePropsType) {
 						viewBox="0 0 20 20"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
+						onClick={() => showModal(setCategoryDeleteModal, 'category-delete')}
 					>
 						<g clipPath="url(#clip0_7_784)">
 							<path
