@@ -1,12 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/block/Header';
+import Main from './components/pages/Main';
 
 function App() {
 	return (
-		<div className="App">
-			<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-				Learn React
-			</a>
-		</div>
+		<Router>
+			<div className="App">
+				<Header />
+				<Routes>
+					<Route path="/*" element={<Main />} />
+				</Routes>
+			</div>
+		</Router>
 	);
 }
 
