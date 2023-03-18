@@ -30,20 +30,10 @@ customAxios.interceptors.response.use(
 			const originalRequest = config;
 			const refreshToken = localStorage.getItem('refreshToken');
 
-			const { data } = await axios.post(
-				`/v1/token/refresh`, // token refresh api
-				{
-					refresh_token: refreshToken,
-				}
-				// {
-				// 	headers: {
-				// 		Authorization: `Bearer ${refreshToken}`,
-				// 	},
-				// }
-			);
+			const { data } = await axios.post(`/v1/token/refresh`, {
+				refresh_token: refreshToken,
+			});
 			const { access_token: newAccessToken, refresh_token: newRefreshToken } = data;
-
-			console.log(data);
 
 			if (newAccessToken) {
 				localStorage.setItem('accessToken', newAccessToken);
@@ -55,8 +45,6 @@ customAxios.interceptors.response.use(
 			}
 
 			originalRequest.headers.authorization = `Bearer ${newAccessToken}`;
-
-			console.log(originalRequest);
 
 			return axios(originalRequest);
 		}

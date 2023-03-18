@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import Skeleton from 'react-loading-skeleton';
@@ -7,6 +8,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { categorySelect } from '../../services/atom';
 import CategoryBtn from '../atoms/CategoryBtn';
 import customAxios from '../../utils/customAxios';
+import { ICategory } from '../../abstracts/type';
 
 const CategoryWrapper = styled.div`
 	margin: 0;
@@ -127,18 +129,9 @@ const CheckBtn = styled.div`
 	opacity: 0;
 `;
 
-// type CategoryType = {
-// 	favorites: Array<string>;
-// 	categories: Array<string>;
-// };
-
-interface ICategory {
-	categoryId: number;
-	categoryName: string;
-	favorite: boolean;
-}
-
 function Category() {
+	const navigate = useNavigate();
+
 	const [categories, setCategories] = useState<ICategory[]>([]);
 	const [favoriteCategories, setFavoriteCategories] = useState<ICategory[]>([]);
 
@@ -164,31 +157,48 @@ function Category() {
 		return categories.data;
 	});
 
-	const AddCategoryQuery = useMutation('categories', async (newCategoryName: string) => {
-		await customAxios.post(
-			'/v1/category/new',
-			{
-				categoryName: newCategoryName,
-			},
-			{
-				withCredentials: true,
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			}
-		);
-		await refetch();
-	});
+	const closeCategoryForm = () => {
+		const categoryAddBtn = document.getElementById('category-add-btn');
+		const categoryAddForm = document.getElementById('category-add-form');
+		const categoryInput = document.getElementById('category-input') as HTMLInputElement;
 
-	const handleOnClick = () => {
-		AddCategoryQuery.mutate(newCategory);
-	};
-
-	const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			handleOnClick();
+		if (categoryAddForm && categoryAddBtn && categoryInput) {
+			categoryInput.value = '';
+			categoryAddForm.style.opacity = '0';
+			setTimeout(() => {
+				categoryAddBtn.style.display = 'block';
+				categoryAddForm.style.display = 'none';
+			}, 101);
+			setTimeout(() => {
+				categoryAddBtn.style.opacity = '1';
+			}, 201);
 		}
 	};
+
+	const AddCategoryQuery = useMutation(
+		(newCategoryName: string) =>
+			customAxios.post(
+				'v1/category/new',
+				{ categoryName: newCategoryName },
+				{
+					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+					},
+				}
+			),
+		{
+			onSuccess: (res) => {
+				refetch();
+
+				const categoryId = res.data as number;
+
+				navigate(`/${newCategory}`);
+				setCategory({ categoryName: newCategory, categoryId });
+				closeCategoryForm();
+			},
+		}
+	);
 
 	useEffect(() => {
 		if (data !== undefined) {
@@ -234,18 +244,17 @@ function Category() {
 		}
 	};
 
-	const closeCategoryForm = () => {
-		const categoryAddBtn = document.getElementById('category-add-btn');
-		const categoryAddForm = document.getElementById('category-add-form');
-		if (categoryAddForm && categoryAddBtn) {
-			categoryAddForm.style.opacity = '0';
-			setTimeout(() => {
-				categoryAddBtn.style.display = 'block';
-				categoryAddForm.style.display = 'none';
-			}, 101);
-			setTimeout(() => {
-				categoryAddBtn.style.opacity = '1';
-			}, 201);
+	const addCategory = async () => {
+		await AddCategoryQuery.mutateAsync(newCategory);
+	};
+
+	const handleOnKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			if (e.nativeEvent.isComposing) {
+				return;
+			}
+
+			await addCategory();
 		}
 	};
 
@@ -306,9 +315,9 @@ function Category() {
 										id="category-input"
 										onChange={(e) => changeCategoryText(e)}
 										placeholder="카테고리를 입력하세요."
-										onKeyDown={(e) => handleOnKeyPress(e)}
+										onKeyUp={(e) => handleOnKeyPress(e)}
 									/>
-									<CheckBtn id="check-btn" onClick={handleOnClick}>
+									<CheckBtn id="check-btn" onClick={addCategory}>
 										<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<g clipPath="url(#clip0_175_543)">
 												<path

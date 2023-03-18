@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ILoginData, IRegisterData } from '../../abstracts/type';
 import customAxios from '../../utils/customAxios';
 
 const LoginPage = styled.div`
@@ -226,20 +227,6 @@ const GoToOtherForm = styled.p`
 	flex-direction: row;
 	cursor: pointer;
 `;
-
-interface ILoginData {
-	userEmail: string;
-	userPassword: string;
-}
-
-interface IRegisterData extends ILoginData {
-	userNickname: string;
-}
-
-// interface IUserData {
-// 	userEmail: string;
-// 	userNickname: string;
-// }
 
 export default function Login() {
 	const loginBlock = useRef<HTMLDivElement>(null);

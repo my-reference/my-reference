@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { categorySelect, categoryDeleteModalSelect } from '../../services/atom';
@@ -22,7 +23,7 @@ const BackgroundModal = styled.div`
 
 const ModalWrapper = styled.div`
 	width: 420px;
-	height: 100px;
+	height: 130px;
 	background-color: #f3f3f3;
 	border-radius: 12px;
 	position: relative;
@@ -46,7 +47,7 @@ const CloseBtn = styled.div`
 const InputWrapper = styled.div`
 	display: flex;
 	flex-direction: row;
-	margin: 11px 15px 0 15px;
+	margin: 22px 15px 0 15px;
 	width: calc(100% - 30px);
 	font-family: 'Pretendard';
 	font-style: normal;
@@ -54,6 +55,16 @@ const InputWrapper = styled.div`
 	font-size: 16px;
 	line-height: 19px;
 	color: #1a1b1e;
+	flex-direction: column;
+	align-items: center;
+	span {
+		font-size: 18px;
+	}
+	> p:last-of-type {
+		color: #b1b1b1;
+		font-size: 14px;
+		margin-top: 6px;
+	}
 `;
 
 const AddButton = styled.button`
@@ -82,6 +93,7 @@ const AddButton = styled.button`
 export default function CategoryDeleteModal() {
 	const category = useRecoilValue(categorySelect);
 	const setCategoryDeleteModal = useSetRecoilState(categoryDeleteModalSelect);
+	const navigate = useNavigate();
 
 	const { refetch } = useQuery('categories', async () => {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
@@ -107,8 +119,14 @@ export default function CategoryDeleteModal() {
 				},
 			}
 		);
-		await refetch();
 	});
+
+	const CloseModalAfterDelete = async () => {
+		await DeleteCategoryQuery.mutateAsync(category.categoryId);
+		await refetch();
+		navigate('/');
+		closeModal(setCategoryDeleteModal, 'category-delete');
+	};
 	return (
 		<BackgroundModal id="category-delete-modal">
 			<ModalWrapper id="category-delete-modal-inner">
@@ -128,9 +146,12 @@ export default function CategoryDeleteModal() {
 					</svg>
 				</CloseBtn>
 				<InputWrapper>
-					<p>&quot;{category.categoryName}&quot; 카테고리를 정말 삭제하실거에요? </p>
+					<p>
+						<span>&quot;{category.categoryName}&quot;</span> 카테고리를 정말 삭제하실거에요? 😢
+					</p>
+					<p>❗️이 행동은 되돌릴 수 없어요.</p>
 				</InputWrapper>
-				<AddButton type="button" onClick={() => DeleteCategoryQuery.mutate(category.categoryId)}>
+				<AddButton type="button" onClick={CloseModalAfterDelete}>
 					삭제하기
 				</AddButton>
 			</ModalWrapper>

@@ -5,6 +5,7 @@ import MainTitle from '../atoms/MainTitle';
 import Post from '../atoms/Post';
 import { categorySelect } from '../../services/atom';
 import PostAdd from '../atoms/PostAdd';
+import { PostsPropsType } from '../../abstracts/type';
 
 const PostsWrapper = styled.div`
 	display: grid;
@@ -53,10 +54,6 @@ const PostAtom = styled.div`
 		}
 	}
 `;
-
-type PostsPropsType = {
-	posts: Array<{ postCategory: string; postAddDate: string; postLink: string }>;
-};
 
 function Posts({ posts }: PostsPropsType) {
 	const { categoryName, categoryId } = useRecoilValue(categorySelect);

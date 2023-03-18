@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Cheerio from 'cheerio';
 import axios from 'axios';
 import PostSkeleton from './PostSkeleton';
+import { PostType } from '../../abstracts/type';
 
 const PostWrapper = styled.div`
 	display: flex;
@@ -127,13 +128,7 @@ const PostMangeIcon = styled.div`
 	}
 `;
 
-export type PostPropsType = {
-	postCategory: string;
-	postAddDate: string;
-	postLink: string;
-};
-
-function Post({ postCategory, postAddDate, postLink }: PostPropsType) {
+function Post({ postCategory, postAddDate, postLink }: PostType) {
 	const [postTitle, setPostTitle] = useState('');
 	const [postSource, setPostSource] = useState('');
 	const [postImg, setPostImg] = useState('');
