@@ -138,6 +138,8 @@ function Category() {
 	const setCategory = useSetRecoilState(categorySelect);
 	const [newCategory, setNewCategory] = useState('');
 
+	const [isPosting, setIsPosting] = useState(false);
+
 	const changeCategory = (categoryName: string, categoryId: number) => {
 		setCategory({ categoryName, categoryId });
 	};
@@ -213,7 +215,7 @@ function Category() {
 		const checkBtn = document.getElementById('check-btn');
 		const categoryInput = document.getElementById('category-input');
 		if (checkBtn && categoryInput) {
-			if (newCategory.length >= 2) {
+			if (newCategory.length >= 2 && newCategory.length <= 12) {
 				checkBtn.style.display = 'block';
 				categoryInput.style.width = '134px';
 				setTimeout(() => {
@@ -246,14 +248,13 @@ function Category() {
 
 	const addCategory = async () => {
 		await AddCategoryQuery.mutateAsync(newCategory);
+		setIsPosting(false);
 	};
 
 	const handleOnKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			if (e.nativeEvent.isComposing) {
-				return;
-			}
-
+		const checkBtn = document.getElementById('check-btn');
+		if (e.key === 'Enter' && isPosting === false && checkBtn?.style.display === 'block') {
+			setIsPosting(true);
 			await addCategory();
 		}
 	};

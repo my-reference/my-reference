@@ -27,9 +27,7 @@ export type PostType = {
 	postLink: string;
 };
 
-export interface ICategory {
-	categoryId: number;
-	categoryName: string;
+export interface ICategory extends ICategoryObj {
 	favorite: boolean;
 }
 

@@ -9,6 +9,9 @@ import PostAddModal from '../block/PostAddModal';
 import { categorySelect, postAddModalSelect, categoryDeleteModalSelect } from '../../services/atom';
 import CategoryDeleteModal from '../block/CategoryDeleteModal';
 
+// const CategoryDeleteModal = lazy(() => import('../block/CategoryDeleteModal'));
+// const PostAddModal = lazy(() => import('../block/PostAddModal'));
+
 const MainPageStyle = styled.main`
 	display: flex;
 	padding: 60px 20px;
