@@ -57,8 +57,16 @@ const InputWrapper = styled.div`
 	color: #1a1b1e;
 	flex-direction: column;
 	align-items: center;
+	> p:first-of-type {
+		display: flex;
+	}
 	span {
 		font-size: 18px;
+		max-width: 100px;
+		display: block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 	> p:last-of-type {
 		color: #b1b1b1;
@@ -147,7 +155,8 @@ export default function CategoryDeleteModal() {
 				</CloseBtn>
 				<InputWrapper>
 					<p>
-						<span>&quot;{category.categoryName}&quot;</span> 카테고리를 정말 삭제하실거에요? 😢
+						&quot;
+						<span>{category.categoryName}</span>&quot; 카테고리를 정말 삭제하실거에요? 😢
 					</p>
 					<p>❗️이 행동은 되돌릴 수 없어요.</p>
 				</InputWrapper>

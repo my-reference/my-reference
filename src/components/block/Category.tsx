@@ -215,7 +215,7 @@ function Category() {
 		const checkBtn = document.getElementById('check-btn');
 		const categoryInput = document.getElementById('category-input');
 		if (checkBtn && categoryInput) {
-			if (newCategory.length >= 2) {
+			if (newCategory.length >= 2 && newCategory.length <= 12) {
 				checkBtn.style.display = 'block';
 				categoryInput.style.width = '134px';
 				setTimeout(() => {
@@ -252,7 +252,8 @@ function Category() {
 	};
 
 	const handleOnKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter' && isPosting === false) {
+		const checkBtn = document.getElementById('check-btn');
+		if (e.key === 'Enter' && isPosting === false && checkBtn?.style.display === 'block') {
 			setIsPosting(true);
 			await addCategory();
 		}
