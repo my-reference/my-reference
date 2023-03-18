@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useQuery } from 'react-query';
 // import axios from 'axios';
 import Cheerio from 'cheerio';
 import axios from 'axios';
@@ -135,9 +136,8 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 	const [postSource, setPostSource] = useState('');
 	const [postImg, setPostImg] = useState('');
 
-	const [loading, setLoading] = useState(true);
-
 	const [isClick, setIsClick] = useState(false);
+	const copyBlock = useRef<HTMLDivElement>(null);
 
 	const getLdJsonObject = ($: any, index = 0): any => {
 		const scriptEles = $('script[type ="application/ld+json"]')?.toArray();
@@ -148,43 +148,55 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 		return JSON.parse(scriptEles[index].firstChild.data);
 	};
 
-	const getHtml = async () => {
-		try {
-			return await axios.get(`http://3.35.43.247:8080/${postLink}`, {
+	const updateData = (html: any) => {
+		const $ = Cheerio.load(html.data);
+		const favicon = postLink.split('/');
+		favicon.pop();
+
+		setPostTitle($('title').text() || $('meta[name="title"]').attr('content') || '');
+
+		if ($('meta[property="article:pc_service_home"]').attr('content') === 'https://www.tistory.com') {
+			setPostSource(`${favicon.join('/')}/favicon.ico`);
+		} else {
+			setPostSource(
+				$('meta[name="icon"]').attr('content') ||
+					`https://www.google.com/s2/favicons?domain=${postLink}&sz=128` ||
+					getLdJsonObject(Cheerio.load(html.data))?.publisher.logo.url ||
+					''
+			);
+		}
+
+		setPostImg($('meta[property="og:image"]').attr('content') || postSource || $('img').attr('src') || '');
+	};
+
+	const loadHtmlData = useQuery(
+		[postLink],
+		async () => {
+			const htmlData = await axios.get(`http://3.35.43.247:8080/${postLink}`, {
 				headers: {
 					'Access-Control-Allow-Origin': '*',
 					'X-Requested-With': '*',
 				},
 				maxRedirects: 0,
 			});
-		} catch (err) {
-			// eslint-disable-next-line no-console
-			return console.error(err);
+			return htmlData;
+		},
+		{
+			refetchOnMount: false,
+			refetchOnWindowFocus: false,
+			staleTime: 5000,
+			cacheTime: Infinity,
+			onSuccess: (html: any) => {
+				updateData(html);
+			},
 		}
-	};
+	);
 
-	const selectData = () =>
-		getHtml().then((html: any) => {
-			const $ = Cheerio.load(html.data);
-			const favicon = postLink.split('/');
-			favicon.pop();
-
-			setPostTitle($('title').text() || $('meta[name="title"]').attr('content') || '');
-
-			if ($('meta[property="article:pc_service_home"]').attr('content') === 'https://www.tistory.com') {
-				setPostSource(`${favicon.join('/')}/favicon.ico`);
-			} else {
-				setPostSource(
-					$('meta[name="icon"]').attr('content') ||
-						`https://www.google.com/s2/favicons?domain=${postLink}&sz=128` ||
-						getLdJsonObject(Cheerio.load(html.data))?.publisher.logo.url ||
-						''
-				);
-			}
-
-			setPostImg($('meta[property="og:image"]').attr('content') || postSource || $('img').attr('src') || '');
-			setLoading(false);
-		});
+	useEffect(() => {
+		if (loadHtmlData.isFetched) {
+			updateData(loadHtmlData.data);
+		}
+	}, []);
 
 	const clickCopyIcon = async (e: React.MouseEvent<SVGElement>) => {
 		if (isClick) {
@@ -195,22 +207,20 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 		e.preventDefault();
 
 		if (navigator.clipboard) {
-			// (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
 			navigator.clipboard
 				.writeText(postLink)
 				.then(() => {
-					const copyBlock = document.querySelector('#copyBlock') as HTMLDivElement;
+					const copyBlockRef = copyBlock.current as HTMLDivElement;
+
 					if (copyBlock) {
-						copyBlock.style.display = 'block';
-						copyBlock.style.opacity = '1';
-						copyBlock.style.transition = 'all 0.22s ease';
+						copyBlockRef.style.display = 'block';
+						copyBlockRef.style.opacity = '1';
 
 						setTimeout(() => {
-							copyBlock.style.opacity = '0';
+							copyBlockRef.style.opacity = '0';
 						}, 2000);
 						setTimeout(() => {
-							copyBlock.style.display = 'none';
-							copyBlock.style.transition = '';
+							copyBlockRef.style.display = 'none';
 							setIsClick(false);
 						}, 2220);
 					}
@@ -222,14 +232,10 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 		}
 	};
 
-	useEffect(() => {
-		setLoading(true);
-		selectData();
-	}, []);
 	return (
 		// eslint-disable-next-line react/jsx-no-useless-fragment
 		<>
-			{loading ? (
+			{loadHtmlData.isFetching ? (
 				<PostSkeleton />
 			) : (
 				<PostWrapper>
@@ -282,7 +288,7 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 								</defs>
 							</svg>
 						</PostMangeIcon>
-						<PostMangeIcon>
+						<PostMangeIcon id="copyIcon">
 							<svg
 								className="copy"
 								width="21"
@@ -305,7 +311,7 @@ function Post({ postCategory, postAddDate, postLink }: PostType) {
 									</clipPath>
 								</defs>
 							</svg>
-							<CopySuccessBlock />
+							{isClick && <CopySuccessBlock ref={copyBlock} />}
 						</PostMangeIcon>
 						<PostMangeIcon>
 							<svg

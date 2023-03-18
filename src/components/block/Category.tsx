@@ -138,6 +138,8 @@ function Category() {
 	const setCategory = useSetRecoilState(categorySelect);
 	const [newCategory, setNewCategory] = useState('');
 
+	const [isPosting, setIsPosting] = useState(false);
+
 	const changeCategory = (categoryName: string, categoryId: number) => {
 		setCategory({ categoryName, categoryId });
 	};
@@ -246,14 +248,12 @@ function Category() {
 
 	const addCategory = async () => {
 		await AddCategoryQuery.mutateAsync(newCategory);
+		setIsPosting(false);
 	};
 
 	const handleOnKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			if (e.nativeEvent.isComposing) {
-				return;
-			}
-
+		if (e.key === 'Enter' && isPosting === false) {
+			setIsPosting(true);
 			await addCategory();
 		}
 	};

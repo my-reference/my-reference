@@ -1,16 +1,16 @@
-import React, { lazy, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import mockMainData from '../../data/mockMainData';
 import Category from '../block/Category';
 import Posts from '../block/Posts';
-// import PostAddModal from '../block/PostAddModal';
+import PostAddModal from '../block/PostAddModal';
 import { categorySelect, postAddModalSelect, categoryDeleteModalSelect } from '../../services/atom';
-// import CategoryDeleteModal from '../block/CategoryDeleteModal';
+import CategoryDeleteModal from '../block/CategoryDeleteModal';
 
-const CategoryDeleteModal = lazy(() => import('../block/CategoryDeleteModal'));
-const PostAddModal = lazy(() => import('../block/PostAddModal'));
+// const CategoryDeleteModal = lazy(() => import('../block/CategoryDeleteModal'));
+// const PostAddModal = lazy(() => import('../block/PostAddModal'));
 
 const MainPageStyle = styled.main`
 	display: flex;
